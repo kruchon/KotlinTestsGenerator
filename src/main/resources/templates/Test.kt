@@ -1,4 +1,4 @@
-<#macro parameterConstructorCall constructorCall>${constructorCall.name}(<#list constructorCall.childrenConstructorCalls as childrenConstructorCall>${childrenConstructorCall.name?lower_case} = <@parameterConstructorCall childrenConstructorCall />,<#else>values = [<#list constructorCall.values as value>"${value}",</#list>]</#list>)</#macro>
+<#macro parameterConstructorCall constructorCall>${constructorCall.name}(<#list constructorCall.childrenConstructorCalls as childrenConstructorCall>${childrenConstructorCall.name?lower_case} = <@parameterConstructorCall childrenConstructorCall />, </#list>values = [<#list constructorCall.values as value>"${value}"<#if value?has_next>,</#if></#list>])</#macro>
 class Test {
     @Test
     fun test() {

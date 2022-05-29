@@ -16,8 +16,7 @@ object KotlinSourceGenerator {
     }
 
     private fun generateFunctionCall(triplet: Triplet): KotlinFunctionCall {
-        val `object` = triplet.`object`
-        val constructorCall = createConstructorCallsRecursively(`object`, 0)
+        val constructorCall = createConstructorCallsRecursively(triplet.`object`, 0)
         return KotlinFunctionCall(triplet.subject.lowercase(), triplet.relationship, constructorCall)
     }
 
@@ -25,16 +24,15 @@ object KotlinSourceGenerator {
         val childrenParameters = parameter.childrenParameters
         val parameterClassName = KotlinGenerationUtils.firstCharToUpperCase(parameter.name)
         nestedLevel.inc()
-        return if (childrenParameters.isEmpty()) {
-            KotlinConstructorCall(nestedLevel, parameterClassName, emptyList(), parameter.values)
-        } else {
-            val childrenConstructorCalls = childrenParameters.map { childrenParameter -> createConstructorCallsRecursively(childrenParameter, nestedLevel) }
-            KotlinConstructorCall(nestedLevel, parameterClassName, childrenConstructorCalls, emptyList())
-        }
+        val childrenConstructorCalls = childrenParameters.map { childrenParameter -> createConstructorCallsRecursively(childrenParameter, nestedLevel) }
+        return KotlinConstructorCall(nestedLevel, parameterClassName, childrenConstructorCalls, parameter.values)
     }
 
     private fun generateAutomaticTest(functionCalls: List<KotlinFunctionCall>): KotlinSource {
-        val subjects = functionCalls.map { it.contextObject }.map { KotlinGenerationUtils.firstCharToUpperCase(it) }.distinct()
+        val subjects = functionCalls
+                .map { it.contextObject }
+                .map { KotlinGenerationUtils.firstCharToUpperCase(it) }
+                .distinct()
         val templateParameters = mutableMapOf<String, Any>()
         templateParameters["subjects"] = subjects
         templateParameters["functionCalls"] = functionCalls
@@ -45,9 +43,8 @@ object KotlinSourceGenerator {
     private fun generateParameterDataClasses(triplets: List<Triplet>): List<KotlinSource> {
         return triplets.flatMap {
             val collectedChildrenParameters = mutableSetOf<Parameter>()
-            val `object` = it.`object`
-            collectedChildrenParameters.add(`object`)
-            addAllChildrenParameters(collectedChildrenParameters, `object`)
+            collectedChildrenParameters.add(it.`object`)
+            addAllChildrenParameters(collectedChildrenParameters, it.`object`)
             collectedChildrenParameters
         }.distinct().map { generateParameterDataClass(it) }
     }
@@ -72,7 +69,7 @@ object KotlinSourceGenerator {
         val parameterClass = KotlinClass(KotlinGenerationUtils.firstCharToUpperCase(parameter.name), fieldClasses)
         templateParameters["parameterClass"] = parameterClass
         val content = TemplateProcessor.process("Parameter.kt", templateParameters)
-        return KotlinSource(parameterClass.name.toString() + ".kt", content)
+        return KotlinSource(parameterClass.name + ".kt", content)
     }
 
     private fun generateSubjectInterfaces(triplets: List<Triplet>): List<KotlinSource> {
