@@ -5,7 +5,7 @@ import edu.kruchon.natural.lang.parser.syntax.Triplet
 
 object TestGenerator {
     fun generate(testScenario: String): List<KotlinSource> {
-        val paragraphs = testScenario.split("\\.")
+        val paragraphs = testScenario.split(".")
         val triplets = mutableListOf<Triplet>()
         for (paragraph in paragraphs) {
             triplets.add(TestParagraphSyntaxTreeParser.parse(paragraph))
