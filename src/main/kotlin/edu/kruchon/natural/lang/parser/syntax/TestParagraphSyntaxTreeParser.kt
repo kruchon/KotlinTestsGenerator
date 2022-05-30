@@ -7,7 +7,7 @@ import edu.stanford.nlp.pipeline.Annotation
 import edu.stanford.nlp.pipeline.StanfordCoreNLP
 import edu.stanford.nlp.semgraph.SemanticGraph
 import edu.stanford.nlp.trees.GrammaticalRelation
-import java.util.*
+import java.util.Properties
 
 internal object TestParagraphSyntaxTreeParser {
 
