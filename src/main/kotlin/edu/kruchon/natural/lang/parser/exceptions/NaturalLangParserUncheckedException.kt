@@ -1,6 +1,6 @@
 package edu.kruchon.natural.lang.parser.exceptions
 
-class NaturalLangParserUncheckedException : RuntimeException {
+internal class NaturalLangParserUncheckedException : RuntimeException {
     constructor() {}
     constructor(message: String?) : super(message) {}
     constructor(message: String?, cause: Throwable?) : super(message, cause) {}

@@ -1,6 +1,6 @@
 package edu.kruchon.natural.lang.parser.syntax
 
-class Parameter(val name: String, val values: List<String>, val childrenParameters: List<Parameter>) {
+internal class Parameter(val name: String, val values: List<String>, val childrenParameters: List<Parameter>) {
     @Override
     override fun toString(): String {
         return "Parameter{" +

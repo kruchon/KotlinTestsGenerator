@@ -9,7 +9,7 @@ import edu.stanford.nlp.semgraph.SemanticGraph
 import edu.stanford.nlp.trees.GrammaticalRelation
 import java.util.*
 
-object TestParagraphSyntaxTreeParser {
+internal object TestParagraphSyntaxTreeParser {
 
     private val pipeline: StanfordCoreNLP
 
@@ -26,9 +26,9 @@ object TestParagraphSyntaxTreeParser {
                 .map { it.get(RelationTriplesAnnotation::class.java) }
                 .flatten()
                 .maxByOrNull { it.confidence })
-        val dependencyTree: SemanticGraph = relationTriple.asDependencyTree().orElseThrow { RuntimeException("Error building dependency tree") }
+        val dependencyTree = relationTriple.asDependencyTree().orElseThrow { RuntimeException("Error building dependency tree") }
         val relationshipNode = dependencyTree.firstRoot
-        val `object`: IndexedWord = dependencyTree.getChildrenWithReln(relationshipNode, GrammaticalRelation.valueOf("obj")).iterator().next()
+        val `object` = dependencyTree.getChildrenWithReln(relationshipNode, GrammaticalRelation.valueOf("obj")).iterator().next()
         return Triplet(relationTriple.subjectLemmaGloss(), relationTriple.relationLemmaGloss(), processNode(`object`, dependencyTree))
     }
 

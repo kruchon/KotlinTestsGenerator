@@ -1,5 +1,5 @@
-import edu.kruchon.natural.lang.parser.codegeneration.KotlinSource
-import edu.kruchon.natural.lang.parser.codegeneration.KotlinSourceGenerator
+import edu.kruchon.natural.lang.parser.generation.KotlinSource
+import edu.kruchon.natural.lang.parser.generation.KotlinSourceGenerator
 import edu.kruchon.natural.lang.parser.syntax.TestParagraphSyntaxTreeParser
 import edu.kruchon.natural.lang.parser.syntax.Triplet
 
