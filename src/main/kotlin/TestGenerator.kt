@@ -1,7 +1,7 @@
-import edu.kruchon.natural.lang.parser.generation.KotlinSource
-import edu.kruchon.natural.lang.parser.generation.KotlinSourceGenerator
-import edu.kruchon.natural.lang.parser.syntax.TestParagraphSyntaxTreeParser
-import edu.kruchon.natural.lang.parser.syntax.Triplet
+import io.github.test.scenario.parser.generation.KotlinSource
+import io.github.test.scenario.parser.generation.KotlinSourceGenerator
+import io.github.test.scenario.parser.syntax.TestParagraphSyntaxTreeParser
+import io.github.test.scenario.parser.syntax.Triplet
 
 object TestGenerator {
     fun generate(testScenario: String): List<KotlinSource> {

@@ -1,3 +1,3 @@
-package edu.kruchon.natural.lang.parser.generation
+package io.github.test.scenario.parser.generation
 
 internal class KotlinConstructorCall(val nestedLevel: Int, val name: String, val childrenConstructorCalls: List<KotlinConstructorCall>, val values: List<String>)

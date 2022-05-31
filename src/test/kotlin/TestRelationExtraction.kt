@@ -1,4 +1,4 @@
-import edu.kruchon.natural.lang.parser.generation.KotlinGenerationProperties
+import io.github.test.scenario.parser.generation.KotlinGenerationProperties
 import org.junit.Test
 
 class TestRelationExtraction {

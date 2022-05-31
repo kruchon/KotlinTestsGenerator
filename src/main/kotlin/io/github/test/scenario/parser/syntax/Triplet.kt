@@ -1,4 +1,4 @@
-package edu.kruchon.natural.lang.parser.syntax
+package io.github.test.scenario.parser.syntax
 
 internal class Triplet(val subject: String, val relationship: String, val `object`: Parameter) {
     @Override

@@ -1,6 +1,6 @@
-package edu.kruchon.natural.lang.parser.generation
+package io.github.test.scenario.parser.generation
 
-import edu.kruchon.natural.lang.parser.syntax.Parameter
+import io.github.test.scenario.parser.syntax.Parameter
 
 internal class KotlinMethod(val name: String, parameter: Parameter) {
     val parameterName = parameter.name

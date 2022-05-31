@@ -1,4 +1,4 @@
-package edu.kruchon.natural.lang.parser.generation
+package io.github.test.scenario.parser.generation
 
 class KotlinSource(val name: String, val content: String) {
     @Override

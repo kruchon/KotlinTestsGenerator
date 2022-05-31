@@ -1,4 +1,4 @@
-package edu.kruchon.natural.lang.parser.syntax
+package io.github.test.scenario.parser.syntax
 
 import edu.stanford.nlp.ling.CoreAnnotations.SentencesAnnotation
 import edu.stanford.nlp.ling.IndexedWord

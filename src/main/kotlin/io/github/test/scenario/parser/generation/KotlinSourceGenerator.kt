@@ -1,8 +1,8 @@
-package edu.kruchon.natural.lang.parser.generation
+package io.github.test.scenario.parser.generation
 
-import edu.kruchon.natural.lang.parser.freemarker.TemplateProcessor
-import edu.kruchon.natural.lang.parser.syntax.Parameter
-import edu.kruchon.natural.lang.parser.syntax.Triplet
+import io.github.test.scenario.parser.freemarker.TemplateProcessor
+import io.github.test.scenario.parser.syntax.Parameter
+import io.github.test.scenario.parser.syntax.Triplet
 
 internal object KotlinSourceGenerator {
     fun generate(triplets: List<Triplet>): List<KotlinSource> {
