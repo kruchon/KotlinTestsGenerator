@@ -1,25 +1,28 @@
-package io.github.test.scenario.parser.generation
+package io.github.kruchon.test.scenario.parser.generation
 
-import io.github.test.scenario.parser.freemarker.TemplateProcessor
-import io.github.test.scenario.parser.syntax.Parameter
-import io.github.test.scenario.parser.syntax.Triplet
+import io.github.kruchon.test.scenario.parser.freemarker.TemplateProcessor
+import io.github.kruchon.test.scenario.parser.syntax.Parameter
+import io.github.kruchon.test.scenario.parser.syntax.Triplet
 
 internal object KotlinSourceGenerator {
-    fun generate(triplets: List<Triplet>): List<KotlinSource> {
-        return generateSubjectInterfaces(triplets) + generateParameterDataClasses(triplets) + generateAutomaticTests(
-            triplets
-        )
+    internal fun generate(triplets: List<Triplet>): TestScenarioParsingResult {
+        val sources =
+            generateSubjectInterfaces(triplets) + generateParameterDataClasses(triplets) + generateAutomaticTests(
+                triplets
+            )
+        return TestScenarioParsingResult(sources)
     }
 
     // todo generation of multiple tests
-    private fun generateAutomaticTests(triplets: List<Triplet>): List<KotlinSource> {
+    private fun generateAutomaticTests(triplets: List<Triplet>): Set<KotlinSource> {
         val functionCalls = triplets.map { generateFunctionCall(it) }
-        return listOf(generateAutomaticTest(functionCalls))
+        return setOf(generateAutomaticTest(functionCalls))
     }
 
     private fun generateFunctionCall(triplet: Triplet): KotlinFunctionCall {
         val constructorCall = createConstructorCallsRecursively(triplet.`object`, 0)
-        return KotlinFunctionCall(triplet.subject.lowercase(), triplet.relationship, constructorCall)
+        val functionName = getFunctionName(triplet.relationship)
+        return KotlinFunctionCall(triplet.subject.lowercase(), functionName, constructorCall)
     }
 
     private fun createConstructorCallsRecursively(parameter: Parameter, nestedLevel: Int): KotlinConstructorCall {
@@ -64,7 +67,7 @@ internal object KotlinSourceGenerator {
         }
     }
 
-    private fun generateParameterDataClasses(triplets: List<Triplet>): List<KotlinSource> {
+    private fun generateParameterDataClasses(triplets: List<Triplet>): Set<KotlinSource> {
         return triplets
             .flatMap {
                 val collectedChildrenParameters = mutableSetOf<Parameter>()
@@ -74,6 +77,7 @@ internal object KotlinSourceGenerator {
             }
             .distinct()
             .map { generateParameterDataClass(it) }
+            .toSet()
     }
 
     private fun addAllChildrenParameters(collectedChildrenParameters: MutableSet<Parameter>, parameter: Parameter) {
@@ -107,15 +111,24 @@ internal object KotlinSourceGenerator {
         return KotlinSource(parameterClass.name + ".kt", content)
     }
 
-    private fun generateSubjectInterfaces(triplets: List<Triplet>): List<KotlinSource> {
+    private fun generateSubjectInterfaces(triplets: List<Triplet>): Set<KotlinSource> {
         val subjectKotlinMethodMappings = mutableMapOf<String, MutableSet<KotlinMethod>>()
         triplets.forEach { triplet ->
-            val kotlinMethod = KotlinMethod(triplet.relationship, triplet.`object`)
+            val functionName = getFunctionName(triplet.relationship)
+            val kotlinMethod = KotlinMethod(functionName, triplet.`object`)
             val subject = triplet.subject
             subjectKotlinMethodMappings.putIfAbsent(subject, HashSet())
             checkNotNull(subjectKotlinMethodMappings[subject]).add(kotlinMethod)
         }
-        return subjectKotlinMethodMappings.entries.map { generateSubjectInterface(it) }
+        return subjectKotlinMethodMappings.entries.map { generateSubjectInterface(it) }.toSet()
+    }
+
+    private fun getFunctionName(relationship: String): String {
+        return if (relationship.split(" ").isNotEmpty()) {
+            "`$relationship`"
+        } else {
+            relationship
+        }
     }
 
     private fun generateSubjectInterface(subjectWithKotlinMethods: Map.Entry<String, Set<KotlinMethod>>): KotlinSource {

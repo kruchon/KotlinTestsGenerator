@@ -1,4 +1,4 @@
-package io.github.test.scenario.parser.syntax
+package io.github.kruchon.test.scenario.parser.syntax
 
 internal class Triplet(val subject: String, val relationship: String, val `object`: Parameter) {
     @Override

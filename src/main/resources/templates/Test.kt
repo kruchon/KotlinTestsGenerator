@@ -1,6 +1,8 @@
-<#macro parameterConstructorCallValues constructorCall><#if (constructorCall.childrenConstructorCalls?size > 0)>,</#if>values = [<#list constructorCall.values as value>"${value}"<#if value?has_next>,</#if></#list>]</#macro>
+<#macro parameterConstructorCallValues constructorCall><#if (constructorCall.childrenConstructorCalls?size > 0 && constructorCall.values?size > 0)>,</#if><#if (constructorCall.values?size > 0)>values = [<#list constructorCall.values as value>"${value}"<#if value?has_next>,</#if></#list>]</#if></#macro>
 <#macro parameterConstructorCall constructorCall>${constructorCall.name}(<@parameterConstructorCallChildrenCalls constructorCall /><@parameterConstructorCallValues constructorCall />)</#macro>
 <#macro parameterConstructorCallChildrenCalls constructorCall><#list constructorCall.childrenConstructorCalls as childrenConstructorCall>${childrenConstructorCall.name?lower_case} = <@parameterConstructorCall childrenConstructorCall /></#list></#macro>
+package ${generationPackage}
+
 <#list subjects as subject>import ${implementationPackage}.${subject}Impl<#if subject?has_next>${'\n'}</#if></#list>
 <#list constructorCallNames as constructorCallName>import ${generationPackage}.${constructorCallName}<#if constructorCallName?has_next>${'\n'}</#if></#list>
 

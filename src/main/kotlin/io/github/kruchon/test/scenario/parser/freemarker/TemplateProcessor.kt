@@ -1,8 +1,8 @@
-package io.github.test.scenario.parser.freemarker
+package io.github.kruchon.test.scenario.parser.freemarker
 
-import io.github.test.scenario.parser.exceptions.NaturalLangParserUncheckedException
-import io.github.test.scenario.parser.generation.KotlinGenerationProperties
-import io.github.test.scenario.parser.generation.KotlinGenerationUtils
+import io.github.kruchon.test.scenario.parser.exceptions.NaturalLangParserUncheckedException
+import io.github.kruchon.test.scenario.parser.generation.KotlinGenerationProperties
+import io.github.kruchon.test.scenario.parser.generation.KotlinGenerationUtils
 import freemarker.template.Configuration
 import freemarker.template.TemplateException
 import freemarker.template.TemplateExceptionHandler

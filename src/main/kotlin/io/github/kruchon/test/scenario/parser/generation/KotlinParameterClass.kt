@@ -1,4 +1,4 @@
-package io.github.test.scenario.parser.generation
+package io.github.kruchon.test.scenario.parser.generation
 
 internal class KotlinParameterClass (
     val name: String,

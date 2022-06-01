@@ -1,4 +1,4 @@
-package io.github.test.scenario.parser.exceptions
+package io.github.kruchon.test.scenario.parser.exceptions
 
 internal class NaturalLangParserUncheckedException : RuntimeException {
     constructor() {}

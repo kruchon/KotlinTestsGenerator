@@ -1,4 +1,4 @@
-package io.github.test.scenario.parser.syntax
+package io.github.kruchon.test.scenario.parser.syntax
 
 internal class Parameter(val name: String, val values: List<String>, val childrenParameters: List<Parameter>) {
     @Override
