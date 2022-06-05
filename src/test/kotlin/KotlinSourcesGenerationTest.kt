@@ -22,6 +22,16 @@ class KotlinSourcesGenerationTest {
         generateKotlinSourcesAndCompareWithExpected("object_with_params")
     }
 
+    @Test
+    fun `object with two params`() {
+        generateKotlinSourcesAndCompareWithExpected("object_with_two_params")
+    }
+
+    @Test
+    fun `mixed object with value and param`() {
+        generateKotlinSourcesAndCompareWithExpected("mixed_object_with_value_and_param")
+    }
+
     private fun generateKotlinSourcesAndCompareWithExpected(testResourceDirectory: String) {
         val inputDirectory = "src/test/resources/scenarios/${testResourceDirectory}"
         val kotlinSourcesDirectory = "$inputDirectory/sources"

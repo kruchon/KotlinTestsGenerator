@@ -1,0 +1,1 @@
+User typed credentials containing login is Nick and password is qwert1234.

@@ -35,8 +35,9 @@ internal object TestParagraphSyntaxTreeParser {
         val dependencyTree =
             relationTriple.asDependencyTree().orElseThrow { RuntimeException("Error building dependency tree") }
         val relationshipNode = dependencyTree.firstRoot
+        val objectNodes = relationTriple.`object`.map { it.originalText() }
         val `object`: IndexedWord = dependencyTree.getChildren(relationshipNode)
-            .first { it.originalText() == relationTriple.`object`[0][CoreAnnotations.ValueAnnotation::class.java] }
+            .first { objectNodes.contains(it.originalText()) }
 
         return Triplet(
             relationTriple.subjectLemmaGloss(),
@@ -47,21 +48,25 @@ internal object TestParagraphSyntaxTreeParser {
 
     private fun processNode(node: IndexedWord, dependencyTree: SemanticGraph): Parameter {
         // todo fix the case with needless nmods
-        val childrenNodes = dependencyTree.getChildren(node).filter {
-            !needlessDependencies.contains(dependencyTree.getEdge(node, it).relation.shortName)
-        }
+        val childrenNodes = getSatisfyingChildrenNodes(node, dependencyTree)
         val childrenParameterNodes = childrenNodes
-            .filter { childrenNode -> dependencyTree.getChildren(childrenNode).isNotEmpty() }
+            .filter { childrenNode -> getSatisfyingChildrenNodes(childrenNode, dependencyTree).isNotEmpty() }
             .sortedBy {
                 it.beginPosition()
             }
             .map { childrenNode -> processNode(childrenNode, dependencyTree) }
         val childrenValueNodes = childrenNodes
-            .filter { childrenNode -> dependencyTree.getChildren(childrenNode).isEmpty() }
+            .filter { childrenNode -> getSatisfyingChildrenNodes(childrenNode, dependencyTree).isEmpty() }
             .sortedBy {
                 it.beginPosition()
             }
             .map(IndexedWord::originalText)
         return Parameter(node.originalText(), childrenValueNodes, childrenParameterNodes)
+    }
+
+    private fun getSatisfyingChildrenNodes(node: IndexedWord, dependencyTree: SemanticGraph): List<IndexedWord> {
+        return dependencyTree.getChildren(node).filter {
+            !needlessDependencies.contains(dependencyTree.getEdge(node, it).relation.shortName)
+        }
     }
 }
