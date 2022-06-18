@@ -1,3 +1,5 @@
+package io.github.kruchon.test.scenario.parser
+
 import io.github.kruchon.test.scenario.parser.generation.KotlinSourceGenerator
 import io.github.kruchon.test.scenario.parser.generation.TestScenarioParsingResult
 import io.github.kruchon.test.scenario.parser.syntax.TestParagraphSyntaxTreeParser
