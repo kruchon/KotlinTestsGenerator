@@ -1,5 +1,5 @@
 package io.github.kruchon
 
-data class Cost(
+data class Price(
     val value: String
 )

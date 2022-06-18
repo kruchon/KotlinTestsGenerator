@@ -3,8 +3,8 @@
 <#macro parameterConstructorCallChildrenCalls constructorCall><#list constructorCall.childrenConstructorCalls as childrenConstructorCall>${childrenConstructorCall.name?lower_case} = <@parameterConstructorCall childrenConstructorCall /></#list></#macro>
 package ${generationPackage}
 
-<#list subjects as subject>import ${implementationPackage}.${subject}Impl<#if subject?has_next>${'\n'}</#if></#list>
-<#list constructorCallNames as constructorCallName>import ${generationPackage}.${constructorCallName}<#if constructorCallName?has_next>${'\n'}</#if></#list>
+<#list subjects as subject>import ${implementationPackage}.${subject}Impl<#if subject?has_next>${'\r\n'}</#if></#list>
+<#list constructorCallNames as constructorCallName>import ${generationPackage}.${constructorCallName}<#if constructorCallName?has_next>${'\r\n'}</#if></#list>
 
 class Test {
     @Test
