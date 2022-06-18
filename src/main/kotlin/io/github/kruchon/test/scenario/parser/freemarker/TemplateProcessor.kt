@@ -1,11 +1,10 @@
 package io.github.kruchon.test.scenario.parser.freemarker
 
-import io.github.kruchon.test.scenario.parser.exceptions.NaturalLangParserUncheckedException
-import io.github.kruchon.test.scenario.parser.generation.KotlinGenerationProperties
-import io.github.kruchon.test.scenario.parser.generation.KotlinGenerationUtils
 import freemarker.template.Configuration
 import freemarker.template.TemplateException
 import freemarker.template.TemplateExceptionHandler
+import io.github.kruchon.test.scenario.parser.exceptions.NaturalLangParserUncheckedException
+import io.github.kruchon.test.scenario.parser.generation.KotlinGenerationProperties
 import java.io.File
 import java.io.IOException
 import java.io.StringWriter
@@ -29,14 +28,14 @@ internal object TemplateProcessor {
         try {
             StringWriter().use { out ->
                 val implementationPackage = KotlinGenerationProperties.implementationPackage
-                    ?: throw NaturalLangParserUncheckedException("Implementation package is not defined in object KotlinGenerationProperties")
+                        ?: throw NaturalLangParserUncheckedException("Implementation package is not defined in object KotlinGenerationProperties")
                 val commonTemplateParameters = mapOf(
-                    "generationPackage" to KotlinGenerationProperties.generationPackage,
-                    "implementationPackage" to implementationPackage
+                        "generationPackage" to KotlinGenerationProperties.generationPackage,
+                        "implementationPackage" to implementationPackage
                 )
                 val template = cfg.getTemplate(templateName)
                 template.process(
-                    templateParameters + commonTemplateParameters, out
+                        templateParameters + commonTemplateParameters, out
                 )
                 return out.toString()
             }

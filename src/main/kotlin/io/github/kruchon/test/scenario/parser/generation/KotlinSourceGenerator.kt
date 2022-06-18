@@ -7,9 +7,9 @@ import io.github.kruchon.test.scenario.parser.syntax.Triplet
 internal object KotlinSourceGenerator {
     internal fun generate(triplets: List<Triplet>): TestScenarioParsingResult {
         val sources =
-            generateSubjectInterfaces(triplets) + generateParameterDataClasses(triplets) + generateAutomaticTests(
-                triplets
-            )
+                generateSubjectInterfaces(triplets) + generateParameterDataClasses(triplets) + generateAutomaticTests(
+                        triplets
+                )
         return TestScenarioParsingResult(sources)
     }
 
@@ -31,8 +31,8 @@ internal object KotlinSourceGenerator {
         nestedLevel.inc()
         val childrenConstructorCalls = childrenParameters.map { childrenParameter ->
             createConstructorCallsRecursively(
-                childrenParameter,
-                nestedLevel
+                    childrenParameter,
+                    nestedLevel
             )
         }
         return KotlinConstructorCall(nestedLevel, parameterClassName, childrenConstructorCalls, parameter.values)
@@ -40,26 +40,26 @@ internal object KotlinSourceGenerator {
 
     private fun generateAutomaticTest(functionCalls: List<KotlinFunctionCall>): KotlinSource {
         val subjects = functionCalls
-            .map { it.contextObject }
-            .map { KotlinGenerationUtils.firstCharToUpperCase(it) }
-            .distinct()
+                .map { it.contextObject }
+                .map { KotlinGenerationUtils.firstCharToUpperCase(it) }
+                .distinct()
         val templateParameters = mutableMapOf<String, Any>()
         templateParameters["subjects"] = subjects
         templateParameters["functionCalls"] = functionCalls
         templateParameters["constructorCallNames"] = functionCalls
-            .flatMap {
-                val constructorCallNames = mutableSetOf<String>()
-                addAllChildrenConstructorCallNamesRecursively(constructorCallNames, it.constructorCall)
-                constructorCallNames
-            }
-            .distinct()
+                .flatMap {
+                    val constructorCallNames = mutableSetOf<String>()
+                    addAllChildrenConstructorCallNamesRecursively(constructorCallNames, it.constructorCall)
+                    constructorCallNames
+                }
+                .distinct()
         val content = TemplateProcessor.process("Test.kt", templateParameters)
         return KotlinSource("Test.kt", content)
     }
 
     private fun addAllChildrenConstructorCallNamesRecursively(
-        collectedConstructorCalls: MutableSet<String>,
-        constructorCall: KotlinConstructorCall
+            collectedConstructorCalls: MutableSet<String>,
+            constructorCall: KotlinConstructorCall
     ) {
         collectedConstructorCalls.add(constructorCall.name)
         for (childrenConstructorCall in constructorCall.childrenConstructorCalls) {
@@ -69,15 +69,15 @@ internal object KotlinSourceGenerator {
 
     private fun generateParameterDataClasses(triplets: List<Triplet>): Set<KotlinSource> {
         return triplets
-            .flatMap {
-                val collectedChildrenParameters = mutableSetOf<Parameter>()
-                collectedChildrenParameters.add(it.`object`)
-                addAllChildrenParameters(collectedChildrenParameters, it.`object`)
-                collectedChildrenParameters
-            }
-            .distinct()
-            .map { generateParameterDataClass(it) }
-            .toSet()
+                .flatMap {
+                    val collectedChildrenParameters = mutableSetOf<Parameter>()
+                    collectedChildrenParameters.add(it.`object`)
+                    addAllChildrenParameters(collectedChildrenParameters, it.`object`)
+                    collectedChildrenParameters
+                }
+                .distinct()
+                .map { generateParameterDataClass(it) }
+                .toSet()
     }
 
     private fun addAllChildrenParameters(collectedChildrenParameters: MutableSet<Parameter>, parameter: Parameter) {
@@ -96,16 +96,16 @@ internal object KotlinSourceGenerator {
         val fieldClasses = mutableSetOf<KotlinParameterClass>()
         for (field in parameter.childrenParameters) {
             fieldClasses.add(
-                KotlinParameterClass(
-                    KotlinGenerationUtils.firstCharToUpperCase(field.name),
-                    emptySet(),
-                    emptyList()
-                )
+                    KotlinParameterClass(
+                            KotlinGenerationUtils.firstCharToUpperCase(field.name),
+                            emptySet(),
+                            emptyList()
+                    )
             )
         }
         val valueTypes = parameter.values.map { ValueType.STRING }
         val parameterClass =
-            KotlinParameterClass(KotlinGenerationUtils.firstCharToUpperCase(parameter.name), fieldClasses, valueTypes)
+                KotlinParameterClass(KotlinGenerationUtils.firstCharToUpperCase(parameter.name), fieldClasses, valueTypes)
         templateParameters["parameterClass"] = parameterClass
         val content = TemplateProcessor.process("Parameter.kt", templateParameters)
         return KotlinSource(parameterClass.name + ".kt", content)
