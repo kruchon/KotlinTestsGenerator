@@ -15,7 +15,7 @@ internal object KotlinSourceGenerator {
     // todo generation of multiple tests
     private fun generateSingleAutomatedTest(triplets: List<Triplet>): Set<KotlinSource> {
         val functionCalls = triplets.map { generateFunctionCall(it) }
-        return setOf(generateAutomaticTest(functionCalls))
+        return setOf(generateAutomatedTest(functionCalls))
     }
 
     private fun generateFunctionCall(triplet: Triplet): KotlinFunctionCall {
@@ -37,7 +37,7 @@ internal object KotlinSourceGenerator {
         return KotlinConstructorCall(nestedLevel, parameterClassName, childrenConstructorCalls, parameter.values)
     }
 
-    private fun generateAutomaticTest(functionCalls: List<KotlinFunctionCall>): KotlinSource {
+    private fun generateAutomatedTest(functionCalls: List<KotlinFunctionCall>): KotlinSource {
         val subjects = functionCalls
                 .map { it.contextObject }
                 .map { KotlinGenerationUtils.firstCharToUpperCase(it) }
