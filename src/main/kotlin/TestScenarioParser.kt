@@ -4,7 +4,7 @@ import io.github.kruchon.test.scenario.parser.syntax.TestParagraphSyntaxTreePars
 import io.github.kruchon.test.scenario.parser.syntax.Triplet
 
 object TestScenarioParser {
-    fun parse(testScenarioName: String = "Test", testScenarioContent: String): TestScenarioParsingResult {
+    fun parse(testScenarioContent: String, testScenarioName: String = "Test"): TestScenarioParsingResult {
         val paragraphs = testScenarioContent.removeSuffix(".").split(".")
         val triplets = mutableListOf<Triplet>()
         for (paragraph in paragraphs) {
