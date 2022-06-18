@@ -5,11 +5,10 @@ import io.github.kruchon.test.scenario.parser.syntax.Parameter
 import io.github.kruchon.test.scenario.parser.syntax.Triplet
 
 internal object KotlinSourceGenerator {
-    internal fun generate(triplets: List<Triplet>): TestScenarioParsingResult {
-        val sources =
-                generateSubjectInterfaces(triplets) + generateParameterDataClasses(triplets) + generateAutomaticTests(
-                        triplets
-                )
+    internal fun generateSingleScenario(triplets: List<Triplet>): TestScenarioParsingResult {
+        val sources = generateSubjectInterfaces(triplets) +
+                generateParameterDataClasses(triplets) +
+                generateAutomaticTests(triplets)
         return TestScenarioParsingResult(sources)
     }
 

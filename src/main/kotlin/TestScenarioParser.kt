@@ -4,12 +4,12 @@ import io.github.kruchon.test.scenario.parser.syntax.TestParagraphSyntaxTreePars
 import io.github.kruchon.test.scenario.parser.syntax.Triplet
 
 object TestScenarioParser {
-    fun parse(testScenario: String): TestScenarioParsingResult {
-        val paragraphs = testScenario.removeSuffix(".").split(".")
+    fun parse(testScenarioName: String = "Test", testScenarioContent: String): TestScenarioParsingResult {
+        val paragraphs = testScenarioContent.removeSuffix(".").split(".")
         val triplets = mutableListOf<Triplet>()
         for (paragraph in paragraphs) {
             triplets.add(TestParagraphSyntaxTreeParser.parse(paragraph))
         }
-        return KotlinSourceGenerator.generate(triplets)
+        return KotlinSourceGenerator.generateSingleScenario(triplets)
     }
 }
