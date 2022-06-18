@@ -10,6 +10,6 @@ object TestScenarioParser {
         for (paragraph in paragraphs) {
             triplets.add(TestParagraphSyntaxTreeParser.parse(paragraph))
         }
-        return KotlinSourceGenerator.generateSingleScenario(triplets)
+        return KotlinSourceGenerator.generateSingleScenario(triplets, testScenarioName)
     }
 }
