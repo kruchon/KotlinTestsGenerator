@@ -7,8 +7,6 @@ class Test {
     @Test
     fun test() {
         val user = UserImpl()
-        user.run {
-            `log into`(account = Account())
-        }
+        user `log into` Account()
     }
 }

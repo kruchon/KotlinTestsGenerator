@@ -1,12 +1,11 @@
 import io.github.kruchon.test.scenario.parser.generation.KotlinGenerationProperties
 import io.github.kruchon.test.scenario.parser.generation.KotlinSource
-import java.io.File
-import junit.framework.Assert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import java.io.File
 
 class KotlinSourcesGenerationTest {
-
     @Before
     fun setUp() {
         KotlinGenerationProperties.implementationPackage = "test.package"

@@ -8,8 +8,6 @@ class Test {
     @Test
     fun test() {
         val user = UserImpl()
-        user.run {
-            `pay`(tariff = Tariff(price = Price(value = "500"),value = "enterprise"))
-        }
+        user pay Tariff(price = Price(value = "500"), value = "enterprise")
     }
 }

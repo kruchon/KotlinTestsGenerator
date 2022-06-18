@@ -1,5 +1,5 @@
-<#macro parameterConstructorCallValues constructorCall><#if (constructorCall.childrenConstructorCalls?size > 0 && constructorCall.values?size > 0)>,</#if><#if (constructorCall.values?size = 1)>value = "${constructorCall.values[0]}"<#elseif (constructorCall.values?size > 1)> values = [<#list constructorCall.values as value>"${value}"<#if value?has_next>,</#if></#list>]</#if></#macro>
-<#macro parameterConstructorCall constructorCall>${constructorCall.name}(<@parameterConstructorCallChildrenCalls constructorCall /><@parameterConstructorCallValues constructorCall />)</#macro>
+<#macro parameterConstructorCallValues constructorCall><#if (constructorCall.childrenConstructorCalls?size > 0 && constructorCall.values?size > 0)>, </#if><#if (constructorCall.values?size = 1)>value = "${constructorCall.values[0]}"<#elseif (constructorCall.values?size > 1)> values = [<#list constructorCall.values as value>"${value}"<#if value?has_next>,</#if></#list>]</#if></#macro>
+<#macro parameterConstructorCall constructorCall>${constructorCall.name}(<@parameterConstructorCallChildrenCalls constructorCall/><@parameterConstructorCallValues constructorCall />)</#macro>
 <#macro parameterConstructorCallChildrenCalls constructorCall><#list constructorCall.childrenConstructorCalls as childrenConstructorCall>${childrenConstructorCall.name?lower_case} = <@parameterConstructorCall childrenConstructorCall /></#list></#macro>
 package ${generationPackage}
 
@@ -13,9 +13,7 @@ class Test {
         val ${subject?lower_case} = ${subject}Impl()
         </#list>
         <#list functionCalls as functionCall>
-        ${functionCall.contextObject}.run {
-            ${functionCall.name}(${functionCall.constructorCall.name?lower_case} = <@parameterConstructorCall functionCall.constructorCall />)
-        }
+        ${functionCall.contextObject} ${functionCall.name} <@parameterConstructorCall functionCall.constructorCall/>
         </#list>
     }
 }

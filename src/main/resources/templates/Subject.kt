@@ -4,6 +4,6 @@ package ${generationPackage}
 
 interface ${subjectClass} {
     <#list kotlinMethods as kotlinMethod>
-    fun ${kotlinMethod.name}(${kotlinMethod.parameterName}: ${kotlinMethod.parameterClassName})
+    infix fun ${kotlinMethod.name}(${kotlinMethod.parameterName}: ${kotlinMethod.parameterClassName})
     </#list>
 }

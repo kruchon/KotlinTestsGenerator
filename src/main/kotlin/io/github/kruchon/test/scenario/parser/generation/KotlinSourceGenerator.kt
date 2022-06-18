@@ -124,7 +124,7 @@ internal object KotlinSourceGenerator {
     }
 
     private fun getFunctionName(relationship: String): String {
-        return if (relationship.split(" ").isNotEmpty()) {
+        return if (relationship.split(" ").size > 1) {
             "`$relationship`"
         } else {
             relationship
