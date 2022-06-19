@@ -9,14 +9,19 @@ internal object KotlinSourceGenerator {
         val triplets = scenarioTriplets.triplets
         val sources = generateSubjectInterfaces(triplets) +
                 generateParameterDataClasses(triplets) +
-                generateSingleAutomatedTest(triplets, scenarioTriplets.scenarioName)
+                generateAutomatedTest(triplets, scenarioTriplets.scenarioName)
         return TestScenarioParsingResult(sources)
     }
 
-    // todo generation of multiple tests
-    private fun generateSingleAutomatedTest(triplets: List<Triplet>, scenarioName: String): Set<KotlinSource> {
-        val functionCalls = triplets.map { generateFunctionCall(it) }
-        return setOf(generateAutomatedTest(functionCalls, scenarioName))
+    internal fun generateScenarios(scenarioTripletsList: List<ScenarioTriplets>): TestScenarioParsingResult {
+        val allScenarioTriplets = scenarioTripletsList.flatMap { it.triplets }
+        val generatedAutomatedTests = scenarioTripletsList.map {
+            generateAutomatedTest(it.triplets, it.scenarioName)
+        }
+        val generatedSubjectInterfaces = generateSubjectInterfaces(allScenarioTriplets)
+        val generatedParameterDataClasses = generateParameterDataClasses(allScenarioTriplets)
+        val sources = generatedSubjectInterfaces + generatedParameterDataClasses + generatedAutomatedTests
+        return TestScenarioParsingResult(sources)
     }
 
     private fun generateFunctionCall(triplet: Triplet): KotlinFunctionCall {
@@ -38,7 +43,8 @@ internal object KotlinSourceGenerator {
         return KotlinConstructorCall(nestedLevel, parameterClassName, childrenConstructorCalls, parameter.values)
     }
 
-    private fun generateAutomatedTest(functionCalls: List<KotlinFunctionCall>, scenarioName: String): KotlinSource {
+    private fun generateAutomatedTest(triplets: List<Triplet>, scenarioName: String): KotlinSource {
+        val functionCalls = triplets.map { generateFunctionCall(it) }
         val subjects = functionCalls
                 .map { it.contextObject }
                 .map { KotlinGenerationUtils.firstCharToUpperCase(it) }

@@ -5,7 +5,7 @@ import edu.stanford.nlp.ling.IndexedWord
 import edu.stanford.nlp.naturalli.NaturalLogicAnnotations.RelationTriplesAnnotation
 import edu.stanford.nlp.pipeline.StanfordCoreNLP
 import edu.stanford.nlp.semgraph.SemanticGraph
-import java.util.*
+import java.util.Properties
 
 internal object TestParagraphSyntaxTreeParser {
 
