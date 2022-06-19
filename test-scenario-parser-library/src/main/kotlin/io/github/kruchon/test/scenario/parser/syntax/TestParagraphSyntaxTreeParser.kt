@@ -3,7 +3,6 @@ package io.github.kruchon.test.scenario.parser.syntax
 import edu.stanford.nlp.ling.CoreAnnotations.SentencesAnnotation
 import edu.stanford.nlp.ling.IndexedWord
 import edu.stanford.nlp.naturalli.NaturalLogicAnnotations.RelationTriplesAnnotation
-import edu.stanford.nlp.pipeline.Annotation
 import edu.stanford.nlp.pipeline.StanfordCoreNLP
 import edu.stanford.nlp.semgraph.SemanticGraph
 import java.util.*
@@ -22,7 +21,15 @@ internal object TestParagraphSyntaxTreeParser {
             "case"
     )
 
-    fun parse(paragraph: String): Triplet {
+    fun parse(testScenarioContent: String): List<Triplet> {
+        return testScenarioContent
+                .removeSuffix(".")
+                .split(".")
+                .map { parseParagraph(it) }
+                .toList()
+    }
+
+    private fun parseParagraph(paragraph: String): Triplet {
         val doc = Annotation(paragraph)
         pipeline.annotate(doc)
         val relationTriple = checkNotNull(doc.get(SentencesAnnotation::class.java)

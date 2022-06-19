@@ -5,17 +5,18 @@ import io.github.kruchon.test.scenario.parser.syntax.Parameter
 import io.github.kruchon.test.scenario.parser.syntax.Triplet
 
 internal object KotlinSourceGenerator {
-    internal fun generateSingleScenario(triplets: List<Triplet>, testScenarioName: String): TestScenarioParsingResult {
+    internal fun generateSingleScenario(scenarioTriplets: ScenarioTriplets): TestScenarioParsingResult {
+        val triplets = scenarioTriplets.triplets
         val sources = generateSubjectInterfaces(triplets) +
                 generateParameterDataClasses(triplets) +
-                generateSingleAutomatedTest(triplets)
+                generateSingleAutomatedTest(triplets, scenarioTriplets.scenarioName)
         return TestScenarioParsingResult(sources)
     }
 
     // todo generation of multiple tests
-    private fun generateSingleAutomatedTest(triplets: List<Triplet>): Set<KotlinSource> {
+    private fun generateSingleAutomatedTest(triplets: List<Triplet>, scenarioName: String): Set<KotlinSource> {
         val functionCalls = triplets.map { generateFunctionCall(it) }
-        return setOf(generateAutomatedTest(functionCalls))
+        return setOf(generateAutomatedTest(functionCalls, scenarioName))
     }
 
     private fun generateFunctionCall(triplet: Triplet): KotlinFunctionCall {
@@ -37,12 +38,13 @@ internal object KotlinSourceGenerator {
         return KotlinConstructorCall(nestedLevel, parameterClassName, childrenConstructorCalls, parameter.values)
     }
 
-    private fun generateAutomatedTest(functionCalls: List<KotlinFunctionCall>): KotlinSource {
+    private fun generateAutomatedTest(functionCalls: List<KotlinFunctionCall>, scenarioName: String): KotlinSource {
         val subjects = functionCalls
                 .map { it.contextObject }
                 .map { KotlinGenerationUtils.firstCharToUpperCase(it) }
                 .distinct()
         val templateParameters = mutableMapOf<String, Any>()
+        templateParameters["scenarioName"] = scenarioName
         templateParameters["subjects"] = subjects
         templateParameters["functionCalls"] = functionCalls
         templateParameters["constructorCallNames"] = functionCalls
@@ -53,7 +55,8 @@ internal object KotlinSourceGenerator {
                 }
                 .distinct()
         val content = TemplateProcessor.process("Test.kt", templateParameters)
-        return KotlinSource("Test.kt", content)
+        val testClassName = "${scenarioName.replace(" ", "")}.kt"
+        return KotlinSource(testClassName, content)
     }
 
     private fun addAllChildrenConstructorCallNamesRecursively(

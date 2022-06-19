@@ -1,5 +1,6 @@
 package io.github.kruchon.test.scenario.parser
 
+import io.github.kruchon.test.scenario.parser.api.TestScenarioParser
 import io.github.kruchon.test.scenario.parser.generation.KotlinGenerationProperties
 import io.github.kruchon.test.scenario.parser.generation.KotlinSource
 import org.junit.Assert.assertEquals
