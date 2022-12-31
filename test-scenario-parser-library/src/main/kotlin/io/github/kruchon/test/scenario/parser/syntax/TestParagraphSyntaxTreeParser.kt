@@ -30,7 +30,7 @@ internal object TestParagraphSyntaxTreeParser {
     }
 
     private fun parseParagraph(paragraph: String): Triplet {
-        val doc = Annotation(paragraph)
+        val doc = edu.stanford.nlp.pipeline.Annotation(paragraph)
         pipeline.annotate(doc)
         val relationTriple = checkNotNull(doc.get(SentencesAnnotation::class.java)
                 .map { it.get(RelationTriplesAnnotation::class.java) }
