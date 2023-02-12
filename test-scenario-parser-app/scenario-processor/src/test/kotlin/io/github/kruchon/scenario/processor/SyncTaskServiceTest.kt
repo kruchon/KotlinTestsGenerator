@@ -35,19 +35,19 @@ class SyncTaskServiceTest : BaseTest() {
                        "files":[
                           {
                              "name":"User.kt",
-                             "content":"package todo.override.default.generation.package\r\n\r\nimport todo.override.default.generation.package.Form\nimport todo.override.default.generation.package.Tariff\r\n\r\ninterface User {\r\n    infix fun `register in`(form: Form)\r\n    infix fun pay(tariff: Tariff)\r\n}"
+                             "content":"package io.github.kruchon\r\n\r\nimport io.github.kruchon.Tariff\nimport io.github.kruchon.Form\r\n\r\ninterface User {\r\n    infix fun pay(tariff: Tariff)\r\n    infix fun `register in`(form: Form)\r\n}"
                           },
                           {
                              "name":"Form.kt",
-                             "content":"package todo.override.default.generation.package\r\n\r\ndata class Form(\r\n    val value: String\r\n)"
+                             "content":"package io.github.kruchon\r\n\r\ndata class Form(\r\n    val value: String\r\n)"
                           },
                           {
                              "name":"Tariff.kt",
-                             "content":"package todo.override.default.generation.package\r\n\r\ndata class Tariff(\r\n    val value: String\r\n)"
+                             "content":"package io.github.kruchon\r\n\r\ndata class Tariff(\r\n    val value: String\r\n)"
                           },
                           {
                              "name":"TariffTest.kt",
-                             "content":"package todo.override.default.generation.package\r\n\r\nimport todo.override.default.implementation.package.UserImpl\r\nimport todo.override.default.generation.package.Form\r\nimport todo.override.default.generation.package.Tariff\r\n\r\nclass Test {\r\n    @Test\r\n    fun test() {\r\n        val user = UserImpl()\r\n        user `register in` Form(value = \"registration\")\r\n        user pay Tariff(value = \"simple\")\r\n    }\r\n}"
+                             "content":"package io.github.kruchon\r\n\r\nimport test.package.UserImpl\r\nimport io.github.kruchon.Form\r\nimport io.github.kruchon.Tariff\r\n\r\nclass Test {\r\n    @Test\r\n    fun test() {\r\n        val user = UserImpl()\r\n        user `register in` Form(value = \"registration\")\r\n        user pay Tariff(value = \"simple\")\r\n    }\r\n}"
                           }
                        ]
                     }
