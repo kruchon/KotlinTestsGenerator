@@ -13,7 +13,7 @@ internal object TemplateProcessor {
 
     private val cfg: Configuration = Configuration(Configuration.VERSION_2_3_20).apply {
         try {
-            this.setDirectoryForTemplateLoading(File(checkNotNull(this.javaClass.classLoader.getResource("templates")).file))
+            this.setClassForTemplateLoading(TemplateProcessor::class.java, "/templates");
             this.defaultEncoding = "UTF-8"
             this.templateExceptionHandler = TemplateExceptionHandler.RETHROW_HANDLER
             this.logTemplateExceptions = false
@@ -28,14 +28,14 @@ internal object TemplateProcessor {
         try {
             StringWriter().use { out ->
                 val implementationPackage = KotlinGenerationProperties.implementationPackage
-                        ?: throw NaturalLangParserUncheckedException("Implementation package is not defined in object KotlinGenerationProperties")
+                    ?: throw NaturalLangParserUncheckedException("Implementation package is not defined in object KotlinGenerationProperties")
                 val commonTemplateParameters = mapOf(
-                        "generationPackage" to KotlinGenerationProperties.generationPackage,
-                        "implementationPackage" to implementationPackage
+                    "generationPackage" to KotlinGenerationProperties.generationPackage,
+                    "implementationPackage" to implementationPackage
                 )
                 val template = cfg.getTemplate(templateName)
                 template.process(
-                        templateParameters + commonTemplateParameters, out
+                    templateParameters + commonTemplateParameters, out
                 )
                 return out.toString()
             }
