@@ -18,37 +18,37 @@ internal object TestParagraphSyntaxTreeParser {
     }
 
     private val needlessDependencies = setOf(
-        "case"
+            "case"
     )
 
     fun parse(testScenarioContent: String): List<Triplet> {
         return testScenarioContent
-            .removeSuffix(".")
-            .split(".")
-            .map { parseParagraph(it) }
-            .toList()
+                .removeSuffix(".")
+                .split(".")
+                .map { parseParagraph(it) }
+                .toList()
     }
 
     private fun parseParagraph(paragraph: String): Triplet {
         val doc = edu.stanford.nlp.pipeline.Annotation(paragraph)
         pipeline.annotate(doc)
         val relationTriple = checkNotNull(doc.get(SentencesAnnotation::class.java)
-            .map { it.get(RelationTriplesAnnotation::class.java) }
-            .flatten()
-            .filter { it.confidence > 0.7 }
-            .maxByOrNull { (it.objectGloss() + it.relationGloss() + it.subjectGloss()).length }
+                .map { it.get(RelationTriplesAnnotation::class.java) }
+                .flatten()
+                .filter { it.confidence > 0.7 }
+                .maxByOrNull { (it.objectGloss() + it.relationGloss() + it.subjectGloss()).length }
         )
         val dependencyTree =
-            relationTriple.asDependencyTree().orElseThrow { RuntimeException("Error building dependency tree") }
+                relationTriple.asDependencyTree().orElseThrow { RuntimeException("Error building dependency tree") }
         val relationshipNode = dependencyTree.firstRoot
         val objectNodes = relationTriple.`object`.map { it.originalText() }
         val `object`: IndexedWord = dependencyTree.getChildren(relationshipNode)
-            .first { objectNodes.contains(it.originalText()) }
+                .first { objectNodes.contains(it.originalText()) }
 
         return Triplet(
-            relationTriple.subjectLemmaGloss(),
-            relationTriple.relationLemmaGloss(),
-            processNode(`object`, dependencyTree)
+                relationTriple.subjectLemmaGloss(),
+                relationTriple.relationLemmaGloss(),
+                processNode(`object`, dependencyTree)
         )
     }
 
@@ -56,17 +56,17 @@ internal object TestParagraphSyntaxTreeParser {
         // todo fix the case with needless nmods
         val childrenNodes = getSatisfyingChildrenNodes(node, dependencyTree)
         val childrenParameterNodes = childrenNodes
-            .filter { childrenNode -> getSatisfyingChildrenNodes(childrenNode, dependencyTree).isNotEmpty() }
-            .sortedBy {
-                it.beginPosition()
-            }
-            .map { childrenNode -> processNode(childrenNode, dependencyTree) }
+                .filter { childrenNode -> getSatisfyingChildrenNodes(childrenNode, dependencyTree).isNotEmpty() }
+                .sortedBy {
+                    it.beginPosition()
+                }
+                .map { childrenNode -> processNode(childrenNode, dependencyTree) }
         val childrenValueNodes = childrenNodes
-            .filter { childrenNode -> getSatisfyingChildrenNodes(childrenNode, dependencyTree).isEmpty() }
-            .sortedBy {
-                it.beginPosition()
-            }
-            .map(IndexedWord::originalText)
+                .filter { childrenNode -> getSatisfyingChildrenNodes(childrenNode, dependencyTree).isEmpty() }
+                .sortedBy {
+                    it.beginPosition()
+                }
+                .map(IndexedWord::originalText)
         return Parameter(node.originalText(), childrenValueNodes, childrenParameterNodes)
     }
 
