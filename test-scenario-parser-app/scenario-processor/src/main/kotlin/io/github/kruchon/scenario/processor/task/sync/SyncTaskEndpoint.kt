@@ -12,6 +12,6 @@ class SyncTaskEndpoint(
 ) {
     @PostMapping
     fun process(@RequestBody syncTaskRequest: SyncTaskRequest): SyncTaskResponse {
-        return syncTaskService.processRequests(syncTaskRequest)
+        return syncTaskService.processRequest(syncTaskRequest)
     }
 }
