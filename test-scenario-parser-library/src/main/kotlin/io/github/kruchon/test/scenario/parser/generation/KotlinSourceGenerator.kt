@@ -5,21 +5,27 @@ import io.github.kruchon.test.scenario.parser.syntax.Parameter
 import io.github.kruchon.test.scenario.parser.syntax.Triplet
 
 internal object KotlinSourceGenerator {
-    internal fun generateSingleScenario(scenarioTriplets: ScenarioTriplets): TestScenarioParsingResult {
+    internal fun generateSingleScenario(
+        scenarioTriplets: ScenarioTriplets,
+        kotlinGenerationProperties: KotlinGenerationProperties
+    ): TestScenarioParsingResult {
         val triplets = scenarioTriplets.triplets
-        val sources = generateSubjectInterfaces(triplets) +
-                generateParameterDataClasses(triplets) +
-                generateAutomatedTest(triplets, scenarioTriplets.scenarioName)
+        val sources = generateSubjectInterfaces(triplets, kotlinGenerationProperties) +
+                generateParameterDataClasses(triplets, kotlinGenerationProperties) +
+                generateAutomatedTest(triplets, scenarioTriplets.scenarioName, kotlinGenerationProperties)
         return TestScenarioParsingResult(sources)
     }
 
-    internal fun generateScenarios(scenarioTripletsList: List<ScenarioTriplets>): TestScenarioParsingResult {
+    internal fun generateScenarios(
+        scenarioTripletsList: List<ScenarioTriplets>,
+        kotlinGenerationProperties: KotlinGenerationProperties
+    ): TestScenarioParsingResult {
         val allScenarioTriplets = scenarioTripletsList.flatMap { it.triplets }
         val generatedAutomatedTests = scenarioTripletsList.map {
-            generateAutomatedTest(it.triplets, it.scenarioName)
+            generateAutomatedTest(it.triplets, it.scenarioName, kotlinGenerationProperties)
         }
-        val generatedSubjectInterfaces = generateSubjectInterfaces(allScenarioTriplets)
-        val generatedParameterDataClasses = generateParameterDataClasses(allScenarioTriplets)
+        val generatedSubjectInterfaces = generateSubjectInterfaces(allScenarioTriplets, kotlinGenerationProperties)
+        val generatedParameterDataClasses = generateParameterDataClasses(allScenarioTriplets, kotlinGenerationProperties)
         val sources = generatedSubjectInterfaces + generatedParameterDataClasses + generatedAutomatedTests
         return TestScenarioParsingResult(sources)
     }
@@ -43,7 +49,11 @@ internal object KotlinSourceGenerator {
         return KotlinConstructorCall(nestedLevel, parameterClassName, childrenConstructorCalls, parameter.values)
     }
 
-    private fun generateAutomatedTest(triplets: List<Triplet>, scenarioName: String): KotlinSource {
+    private fun generateAutomatedTest(
+        triplets: List<Triplet>,
+        scenarioName: String,
+        kotlinGenerationProperties: KotlinGenerationProperties
+    ): KotlinSource {
         val functionCalls = triplets.map { generateFunctionCall(it) }
         val subjects = functionCalls
             .map { it.contextObject }
@@ -60,7 +70,7 @@ internal object KotlinSourceGenerator {
                 constructorCallNames
             }
             .distinct()
-        val content = TemplateProcessor.process("Test.kt", templateParameters)
+        val content = TemplateProcessor.process("Test.kt", templateParameters, kotlinGenerationProperties)
         val testClassName = "${scenarioName.replace(" ", "")}.kt"
         return KotlinSource(testClassName, content)
     }
@@ -75,7 +85,10 @@ internal object KotlinSourceGenerator {
         }
     }
 
-    private fun generateParameterDataClasses(triplets: List<Triplet>): Set<KotlinSource> {
+    private fun generateParameterDataClasses(
+        triplets: List<Triplet>,
+        kotlinGenerationProperties: KotlinGenerationProperties
+    ): Set<KotlinSource> {
         return triplets
             .flatMap {
                 val collectedChildrenParameters = mutableSetOf<Parameter>()
@@ -84,7 +97,7 @@ internal object KotlinSourceGenerator {
                 collectedChildrenParameters
             }
             .distinct()
-            .map { generateParameterDataClass(it) }
+            .map { generateParameterDataClass(it, kotlinGenerationProperties) }
             .toSet()
     }
 
@@ -99,7 +112,7 @@ internal object KotlinSourceGenerator {
         }
     }
 
-    private fun generateParameterDataClass(parameter: Parameter): KotlinSource {
+    private fun generateParameterDataClass(parameter: Parameter, kotlinGenerationProperties: KotlinGenerationProperties): KotlinSource {
         val templateParameters = mutableMapOf<String, Any>()
         val fieldClasses = mutableSetOf<KotlinParameterClass>()
         for (field in parameter.childrenParameters) {
@@ -115,11 +128,14 @@ internal object KotlinSourceGenerator {
         val parameterClass =
             KotlinParameterClass(KotlinGenerationUtils.firstCharToUpperCase(parameter.name), fieldClasses, valueTypes)
         templateParameters["parameterClass"] = parameterClass
-        val content = TemplateProcessor.process("Parameter.kt", templateParameters)
+        val content = TemplateProcessor.process("Parameter.kt", templateParameters, kotlinGenerationProperties)
         return KotlinSource(parameterClass.name + ".kt", content)
     }
 
-    private fun generateSubjectInterfaces(triplets: List<Triplet>): Set<KotlinSource> {
+    private fun generateSubjectInterfaces(
+        triplets: List<Triplet>,
+        kotlinGenerationProperties: KotlinGenerationProperties
+    ): Set<KotlinSource> {
         val subjectKotlinMethodMappings = mutableMapOf<String, MutableSet<KotlinMethod>>()
         triplets.forEach { triplet ->
             val functionName = getFunctionName(triplet.relationship)
@@ -128,7 +144,7 @@ internal object KotlinSourceGenerator {
             subjectKotlinMethodMappings.putIfAbsent(subject, HashSet())
             checkNotNull(subjectKotlinMethodMappings[subject]).add(kotlinMethod)
         }
-        return subjectKotlinMethodMappings.entries.map { generateSubjectInterface(it) }.toSet()
+        return subjectKotlinMethodMappings.entries.map { generateSubjectInterface(it, kotlinGenerationProperties) }.toSet()
     }
 
     private fun getFunctionName(relationship: String): String {
@@ -139,14 +155,17 @@ internal object KotlinSourceGenerator {
         }
     }
 
-    private fun generateSubjectInterface(subjectWithKotlinMethods: Map.Entry<String, Set<KotlinMethod>>): KotlinSource {
+    private fun generateSubjectInterface(
+        subjectWithKotlinMethods: Map.Entry<String, Set<KotlinMethod>>,
+        kotlinGenerationProperties: KotlinGenerationProperties
+    ): KotlinSource {
         val subjectClassName = KotlinGenerationUtils.firstCharToUpperCase(subjectWithKotlinMethods.key)
         val kotlinMethods = subjectWithKotlinMethods.value
         val templateParameters = mutableMapOf<String, Any>()
         templateParameters["subjectClass"] = subjectClassName
         templateParameters["kotlinMethods"] = kotlinMethods
         templateParameters["parameterClassNames"] = kotlinMethods.map { it.parameterClassName }.distinct()
-        val content = TemplateProcessor.process("Subject.kt", templateParameters)
+        val content = TemplateProcessor.process("Subject.kt", templateParameters, kotlinGenerationProperties)
         return KotlinSource("$subjectClassName.kt", content)
     }
 }

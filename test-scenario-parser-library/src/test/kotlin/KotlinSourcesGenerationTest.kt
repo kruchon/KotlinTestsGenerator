@@ -1,7 +1,7 @@
 package io.github.kruchon.test.scenario.parser
 
 import io.github.kruchon.test.scenario.parser.api.TestScenarioParser
-import io.github.kruchon.test.scenario.parser.generation.KotlinGenerationProperties
+import io.github.kruchon.test.scenario.parser.generation.KotlinGenerationDefaultProperties
 import io.github.kruchon.test.scenario.parser.generation.KotlinSource
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -11,7 +11,8 @@ import org.junit.Test
 class KotlinSourcesGenerationTest {
     @Before
     fun setUp() {
-        KotlinGenerationProperties.implementationPackage = "test.package"
+        KotlinGenerationDefaultProperties.generationPackage = "io.github.kruchon"
+        KotlinGenerationDefaultProperties.implementationPackage = "test.package"
     }
 
     @Test
