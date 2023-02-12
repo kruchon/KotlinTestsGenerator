@@ -13,7 +13,7 @@ internal object TemplateProcessor {
 
     private val cfg: Configuration = Configuration(Configuration.VERSION_2_3_20).apply {
         try {
-            this.setDirectoryForTemplateLoading(File(checkNotNull(this.javaClass.classLoader.getResource("templates")).file))
+            this.setDirectoryForTemplateLoading(File(checkNotNull(this.javaClass.classLoader.getResource("/templates")).file))
             this.defaultEncoding = "UTF-8"
             this.templateExceptionHandler = TemplateExceptionHandler.RETHROW_HANDLER
             this.logTemplateExceptions = false

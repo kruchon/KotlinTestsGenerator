@@ -5,8 +5,8 @@ import io.github.kruchon.test.scenario.parser.generation.KotlinGenerationPropert
 import io.github.kruchon.test.scenario.parser.generation.KotlinSource
 import org.junit.Assert.assertEquals
 import org.junit.Before
-import org.junit.Test
 import java.io.File
+import org.junit.Test
 
 class KotlinSourcesGenerationTest {
     @Before
