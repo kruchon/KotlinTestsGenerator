@@ -9,7 +9,7 @@ class SyncTaskService {
 
     fun processRequest(syncTaskRequest: SyncTaskRequest): SyncTaskResponse {
         val testScenarios = syncTaskRequest.scenarios.map { TestScenario(it.name, it.content) }
-        val parsingResult = TestScenarioParser.parse(testScenarios)
+        val parsingResult = TestScenarioParser.parse(testScenarios, syncTaskRequest.generationPackage, syncTaskRequest.implementationPackage)
         return parsingResult.sources.map { SyncTaskResponse.File(it.name, it.content) }.let { SyncTaskResponse(it) }
     }
 
