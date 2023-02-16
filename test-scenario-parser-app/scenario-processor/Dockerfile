@@ -1,8 +1,4 @@
 FROM openjdk:17-alpine
-RUN addgroup -S spring && adduser -S spring -G spring
-USER spring:spring
-VOLUME /tmp
-ARG JAR_FILE
-ADD ${JAR_FILE} /app/app.jar
+COPY /target/scenario-processor-0.0.1-SNAPSHOT-jar-with-dependencies.jar /home/scenario-processor-0.0.1-SNAPSHOT-jar-with-dependencies.jar
 EXPOSE 9010
-ENTRYPOINT ["java","-jar","/app/app.jar"]
+CMD ["java","-jar","/home/scenario-processor-0.0.1-SNAPSHOT-jar-with-dependencies.jar"]
