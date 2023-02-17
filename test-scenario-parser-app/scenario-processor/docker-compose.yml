@@ -1,0 +1,6 @@
+version: "3.9"
+services:
+  scenario-processor:
+    image: kruchon/test-scenario-parser-scenario-processor:0.0.1
+    ports:
+      - "9010:9010"
