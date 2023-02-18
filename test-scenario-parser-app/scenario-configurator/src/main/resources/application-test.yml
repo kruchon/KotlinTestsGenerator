@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: ${postgres-container.jdbcUrl}
+    username: ${postgres-container.username}
+    password: ${postgres-container.password}
+    driver-class-name: ${postgres-container.driverClassName}
+  flyway:
+    url: ${postgres-container.jdbcUrl}
+    user: ${postgres-container.username}
+    password: ${postgres-container.password}
+    locations: classpath:/migrations
+    driver-class-name: ${postgres-container.driverClassName}

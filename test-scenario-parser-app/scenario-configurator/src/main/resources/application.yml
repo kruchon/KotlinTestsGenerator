@@ -1,0 +1,15 @@
+server:
+  port: 9020
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/scenario_parser
+    username: postgres
+    password: postgres
+  flyway:
+    url: jdbc:postgresql://localhost:5432/scenario_parser
+    user: postgres
+    password: postgres
+    locations: classpath:/migrations
+    sql-migration-prefix: V
+    sql-migration-separator: "_"
