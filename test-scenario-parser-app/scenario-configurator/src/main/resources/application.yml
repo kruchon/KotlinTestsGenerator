@@ -1,15 +1,26 @@
 server:
   port: 9020
 
+opentracing:
+  jaeger:
+    log-spans: true
+    udp-sender:
+      host: jaeger
+
 spring:
+  application:
+    name: scenario-processor
   datasource:
-    url: jdbc:postgresql://localhost:5432/scenario_parser
+    url: jdbc:postgresql://postgres:5432/scenario_configurator
     username: postgres
     password: postgres
   flyway:
-    url: jdbc:postgresql://localhost:5432/scenario_parser
+    url: jdbc:postgresql://postgres:5432/scenario_configurator
     user: postgres
     password: postgres
     locations: classpath:/migrations
     sql-migration-prefix: V
     sql-migration-separator: "_"
+
+processor:
+  url: http://scenario-processor:9010

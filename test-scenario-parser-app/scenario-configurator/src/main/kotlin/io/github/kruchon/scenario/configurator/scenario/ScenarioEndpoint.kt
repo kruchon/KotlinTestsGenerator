@@ -14,7 +14,10 @@ class ScenarioEndpoint(
     private val scenarioService: ScenarioService
 ) {
     @PostMapping
-    fun create(@PathVariable projectId: UUID, @RequestBody createScenarioParameters: CreateScenarioParameters): ScenarioView {
+    fun create(
+        @PathVariable projectId: UUID,
+        @RequestBody createScenarioParameters: CreateScenarioParameters
+    ): ScenarioView {
         return scenarioService.create(projectId, createScenarioParameters)
     }
 }

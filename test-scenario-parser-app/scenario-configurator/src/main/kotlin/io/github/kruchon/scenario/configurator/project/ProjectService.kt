@@ -43,6 +43,7 @@ class ProjectService(
         transactionTemplate.execute {
             val project = projectRepository.getReferenceById(id)
             val sources = syncTaskResponse.files.map { Source(null, it.name, it.content, project) }
+            sourceRepository.deleteAllByProjectId(id)
             sourceRepository.saveAll(sources)
         }
     }

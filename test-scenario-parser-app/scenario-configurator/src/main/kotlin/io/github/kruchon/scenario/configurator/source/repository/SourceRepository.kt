@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface SourceRepository: JpaRepository<Source, UUID> {
     fun findByProjectId(projectId: UUID): List<Source>
+    fun deleteAllByProjectId(projectId: UUID)
 }

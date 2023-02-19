@@ -11,7 +11,7 @@
     <properties>
         <kotlin.version>1.8.0</kotlin.version>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
-        <spring.boot.version>3.0.1</spring.boot.version>
+        <spring.boot.version>2.7.7</spring.boot.version>
         <dockerfile.useMavenSettingsForAuth>true</dockerfile.useMavenSettingsForAuth>
     </properties>
 
@@ -150,6 +150,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-test</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.opentracing.contrib</groupId>
+            <artifactId>opentracing-spring-jaeger-cloud-starter</artifactId>
+            <version>3.3.1</version>
         </dependency>
     </dependencies>
 
