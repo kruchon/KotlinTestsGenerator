@@ -1,8 +1,12 @@
 server:
   port: 9010
 
+spring:
+  application:
+    name: scenario-processor
+
 opentracing:
   jaeger:
+    http-sender:
+      url: http://jaeger:14268/api/traces
     log-spans: true
-    udp-sender:
-      host: jaeger

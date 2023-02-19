@@ -4,10 +4,12 @@ services:
     image: kruchon/test-scenario-parser-scenario-configurator:0.0.1
     ports:
       - "9020:9020"
+    build: ./scenario-configurator
   scenario-processor:
     image: kruchon/test-scenario-parser-scenario-processor:0.0.1
     ports:
       - "9010:9010"
+    build: ./scenario-processor
   postgres:
     image: postgres:15.2
     environment:

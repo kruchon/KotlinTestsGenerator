@@ -3,9 +3,9 @@ server:
 
 opentracing:
   jaeger:
+    http-sender:
+      url: http://jaeger:14268/api/traces
     log-spans: true
-    udp-sender:
-      host: jaeger
 
 spring:
   application:

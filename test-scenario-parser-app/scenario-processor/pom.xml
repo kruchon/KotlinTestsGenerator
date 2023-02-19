@@ -89,7 +89,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>io.github.kruchon.scenario.processor.AppKt</mainClass>
+                            <mainClass>io.github.kruchon.scenario.processor.App</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
