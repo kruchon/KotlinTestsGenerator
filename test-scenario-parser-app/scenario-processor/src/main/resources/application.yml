@@ -8,5 +8,5 @@ spring:
 opentracing:
   jaeger:
     http-sender:
-      url: http://jaeger:14268/api/traces
+      url: http://localhost:14268/api/traces
     log-spans: true

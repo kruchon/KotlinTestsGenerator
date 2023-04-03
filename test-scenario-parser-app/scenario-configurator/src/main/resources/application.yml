@@ -4,18 +4,18 @@ server:
 opentracing:
   jaeger:
     http-sender:
-      url: http://jaeger:14268/api/traces
+      url: http://localhost:14268/api/traces
     log-spans: true
 
 spring:
   application:
     name: scenario-processor
   datasource:
-    url: jdbc:postgresql://postgres:5432/scenario_configurator
+    url: jdbc:postgresql://localhost:5432/scenario_configurator
     username: postgres
     password: postgres
   flyway:
-    url: jdbc:postgresql://postgres:5432/scenario_configurator
+    url: jdbc:postgresql://localhost:5432/scenario_configurator
     user: postgres
     password: postgres
     locations: classpath:/migrations
@@ -23,4 +23,4 @@ spring:
     sql-migration-separator: "_"
 
 processor:
-  url: http://scenario-processor:9010
+  url: http://localhost:9010
