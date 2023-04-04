@@ -8,6 +8,8 @@ opentracing:
     log-spans: true
 
 spring:
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL94Dialect
   application:
     name: scenario-processor
   datasource:
