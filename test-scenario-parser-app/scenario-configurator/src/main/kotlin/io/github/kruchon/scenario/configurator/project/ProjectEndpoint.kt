@@ -31,8 +31,13 @@ class ProjectEndpoint(
         return projectService.getById(id)
     }
 
-    @PostMapping("/{id}/process")
-    fun process(@PathVariable id: UUID) {
-        projectService.process(id)
+    @PostMapping("/{id}/process-sync")
+    fun processSync(@PathVariable id: UUID) {
+        projectService.processSync(id)
+    }
+
+    @PostMapping("/{id}/process-async")
+    fun processAsync(@PathVariable id: UUID) {
+        projectService.processAsync(id)
     }
 }

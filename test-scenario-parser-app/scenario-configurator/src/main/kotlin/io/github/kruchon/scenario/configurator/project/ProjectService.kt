@@ -1,5 +1,6 @@
 package io.github.kruchon.scenario.configurator.project
 
+import io.github.kruchon.scenario.configurator.processor.TaskResponse
 import io.github.kruchon.scenario.configurator.processor.TestScenarioProcessorClient
 import io.github.kruchon.scenario.configurator.project.repository.Project
 import io.github.kruchon.scenario.configurator.project.repository.ProjectRepository
@@ -37,14 +38,24 @@ class ProjectService(
         return projectRepository.getReferenceById(id).let { projectMapper.toView(checkNotNull(it.id)) }
     }
 
-    fun process(id: UUID) {
-        val scenarios = scenarioRepository.findByProjectId(id)
-        val syncTaskResponse = testScenarioProcessorClient.processProjectSync(projectRepository.getReferenceById(id), scenarios)
+    fun processSync(projectId: UUID) {
+        val scenarios = scenarioRepository.findByProjectId(projectId)
+        val syncTaskResponse = testScenarioProcessorClient.processProjectSync(projectRepository.getReferenceById(projectId), scenarios)
+        saveTaskResponse(syncTaskResponse)
+    }
+
+    fun saveTaskResponse(taskResponse: TaskResponse) {
         transactionTemplate.execute {
-            val project = projectRepository.getReferenceById(id)
-            val sources = syncTaskResponse.files.map { Source(null, it.name, it.content, project) }
-            sourceRepository.deleteAllByProjectId(id)
+            val projectId = taskResponse.projectId
+            val project = projectRepository.getReferenceById(projectId)
+            val sources = taskResponse.files.map { Source(null, it.name, it.content, project) }
+            sourceRepository.deleteAllByProjectId(projectId)
             sourceRepository.saveAll(sources)
         }
+    }
+
+    fun processAsync(id: UUID) {
+        val scenarios = scenarioRepository.findByProjectId(id)
+        testScenarioProcessorClient.processProjectAsync(projectRepository.getReferenceById(id), scenarios)
     }
 }

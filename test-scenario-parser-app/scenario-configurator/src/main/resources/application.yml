@@ -3,9 +3,11 @@ server:
 
 opentracing:
   jaeger:
-    http-sender:
-      url: http://localhost:14268/api/traces
-    log-spans: true
+    udp-sender:
+      host: localhost
+      port: 5775
+    const-sampler:
+      decision: true
 
 spring:
   jpa:
@@ -14,14 +16,16 @@ spring:
     hibernate:
       naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
       ddl-auto: none
+      properties:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
   application:
-    name: scenario-processor
+    name: scenario-configurator
   datasource:
-    url: jdbc:postgresql://localhost:5432/scenario_configurator
+    url: jdbc:postgresql://localhost:5433/scenario_configurator
     username: postgres
     password: postgres
   flyway:
-    url: jdbc:postgresql://localhost:5432/scenario_configurator
+    url: jdbc:postgresql://localhost:5433/scenario_configurator
     user: postgres
     password: postgres
     locations: classpath:/migrations

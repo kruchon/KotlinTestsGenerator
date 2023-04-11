@@ -1,7 +1,10 @@
 package io.github.kruchon.scenario.configurator.processor
 
-class SyncTaskResponse(
-    val files: List<File>
+import java.util.UUID
+
+class TaskResponse(
+    val files: List<File>,
+    val projectId: UUID
 ) {
     class File(
         val name: String,

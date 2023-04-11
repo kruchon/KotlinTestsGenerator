@@ -7,6 +7,9 @@ spring:
 
 opentracing:
   jaeger:
-    http-sender:
-      url: http://localhost:14268/api/traces
-    log-spans: true
+    udp-sender:
+      host: localhost
+      port: 5775
+    const-sampler:
+      decision: true
+

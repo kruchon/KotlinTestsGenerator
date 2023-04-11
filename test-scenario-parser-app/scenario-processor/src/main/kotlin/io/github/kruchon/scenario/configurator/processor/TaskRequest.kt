@@ -1,11 +1,14 @@
 package io.github.kruchon.scenario.configurator.processor
 
-class SyncTaskRequest(
+import java.util.UUID
+
+data class TaskRequest(
     val scenarios: List<Scenario>,
     val generationPackage: String,
-    val implementationPackage: String
+    val implementationPackage: String,
+    val projectId: UUID
 ) {
-    class Scenario(
+    data class Scenario(
         val name: String,
         val content: String
     )

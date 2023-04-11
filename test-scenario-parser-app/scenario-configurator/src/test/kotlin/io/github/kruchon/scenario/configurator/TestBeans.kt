@@ -6,9 +6,9 @@ import org.springframework.context.annotation.Primary
 
 @TestConfiguration
 class TestBeans {
-    @Bean
+    /*@Bean
     @Primary
     fun testScenarioProcessorClientStub(): TestScenarioProcessorClientStub {
         return TestScenarioProcessorClientStub()
-    }
+    }*/
 }

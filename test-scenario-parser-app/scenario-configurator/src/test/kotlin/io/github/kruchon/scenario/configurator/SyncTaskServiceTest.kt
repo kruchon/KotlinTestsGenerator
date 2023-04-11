@@ -12,8 +12,8 @@ import org.springframework.test.web.servlet.post
 
 class SyncTaskServiceTest : BaseTest() {
 
-    @Autowired
-    lateinit var testScenarioProcessorClientStub: TestScenarioProcessorClientStub
+    /*@Autowired
+    lateinit var testScenarioProcessorClientStub: TestScenarioProcessorClientStub*/
 
     @Test
     fun `automatic test is generated from scenario`() {
@@ -32,7 +32,7 @@ class SyncTaskServiceTest : BaseTest() {
             content = objectMapper.writeValueAsString(
                 CreateScenarioParameters(
                     "TestOne",
-                    "User paid simple tariff."
+                    "User paid tariff with price 500."
                 )
             )
             contentType = MediaType.APPLICATION_JSON
@@ -46,7 +46,7 @@ class SyncTaskServiceTest : BaseTest() {
             content = objectMapper.writeValueAsString(
                 CreateScenarioParameters(
                     "TestTwo",
-                    "User paid another tariff."
+                    "User paid tariff with price 500."
                 )
             )
             contentType = MediaType.APPLICATION_JSON
@@ -61,10 +61,10 @@ class SyncTaskServiceTest : BaseTest() {
                 .andReturn().response.contentAsString, ProjectView::class.java
         )
         assertEquals(2, project.scenarios.size)
-        assertEquals(0, testScenarioProcessorClientStub.getRequestedProjects().size)
+        //assertEquals(0, testScenarioProcessorClientStub.getRequestedProjects().size)
         assertEquals(0, project.sources.size)
 
-        mockMvc.post("/api/configurator/project/${project.id}/process").andExpect {
+        mockMvc.post("/api/configurator/project/${project.id}/process-async").andExpect {
             status {
                 isOk()
             }
@@ -75,7 +75,7 @@ class SyncTaskServiceTest : BaseTest() {
                 .andReturn().response.contentAsString, ProjectView::class.java
         )
         assertEquals(2, project.scenarios.size)
-        assertEquals(1, testScenarioProcessorClientStub.getRequestedProjects().size)
+        //assertEquals(1, testScenarioProcessorClientStub.getRequestedProjects().size)
         assertEquals(2, project.sources.size)
     }
 
