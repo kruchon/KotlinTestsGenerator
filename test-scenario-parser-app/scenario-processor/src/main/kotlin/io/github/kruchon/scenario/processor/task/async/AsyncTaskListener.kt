@@ -13,8 +13,8 @@ class AsyncTaskListener(
     private val taskService: TaskService,
     private val taskResponseKafkaTemplate: KafkaTemplate<String, TaskResponse>
 ) {
-    @KafkaListener(id = "task_processor", topics = ["task_requests"], groupId = "task_requests_processing", containerFactory = "kafkaTaskRequestListenerFactory")
-    fun listen(taskRequest: TaskRequest) {
+    @KafkaListener(concurrency = "2", idIsGroup = false, topics = ["task_requests"], groupId = "task_requests_processing", containerFactory = "kafkaTaskRequestListenerFactory")
+    fun listenFirst(taskRequest: TaskRequest) {
         val taskResponse = taskService.processRequest(taskRequest)
         taskResponseKafkaTemplate.send("task_responses", taskResponse)
     }

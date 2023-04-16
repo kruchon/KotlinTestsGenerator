@@ -32,14 +32,6 @@ class ProcessorBeans {
     }
 
     @Bean
-    fun topic(): NewTopic {
-        return TopicBuilder.name("task_requests")
-            .partitions(1)
-            .replicas(1)
-            .build()
-    }
-
-    @Bean
     fun taskRequestConsumerFactory(): ConsumerFactory<String, TaskRequest> {
         val props: MutableMap<String, Any> = HashMap()
         props[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = "localhost:9092"

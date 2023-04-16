@@ -44,14 +44,6 @@ class ConfiguratorBeans {
     }
 
     @Bean
-    fun topic(): NewTopic {
-        return TopicBuilder.name("task_responses")
-            .partitions(1)
-            .replicas(1)
-            .build()
-    }
-
-    @Bean
     fun transactionTemplate(transactionManager: PlatformTransactionManager): TransactionTemplate {
         return TransactionTemplate(transactionManager)
     }
