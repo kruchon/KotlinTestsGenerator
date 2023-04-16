@@ -1,11 +1,22 @@
 pipeline {
     agent { docker { image 'maven:3.9.0-eclipse-temurin-11' } }
     stages {
+        stage('clean') {
+            sh "rm -rf *"
+        }
+
+        stage('checkout') {
+            checkout scm
+        }
+
+        stage('prepare project') {
+            sh "rm -rf !(./test-scenario-parser-app/scenario-processor/.)"
+            sh "cp -a ./test-scenario-parser-app/scenario-processor/. ."
+            sh "rm -rf ./test-scenario-parser-app/scenario-processor/."
+        }
+
         stage('build') {
-            steps {
-                cd ./test-scenario-parser-app/scenario-processor
-                sh 'mvn clean install -DskipTests=true'
-            }
+            sh "mvn clean compile -DskipTests=true"
         }
     }
 }
