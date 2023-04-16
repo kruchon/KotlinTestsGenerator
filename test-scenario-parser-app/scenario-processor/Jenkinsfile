@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('build') {
             steps {
-                cd /test-scenario-processor-app/scenario-processor
+                cd ./test-scenario-processor-app/scenario-processor
                 sh 'mvn clean install -DskipTests=true'
             }
         }
