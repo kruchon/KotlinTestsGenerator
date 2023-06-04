@@ -30,6 +30,11 @@ class KotlinSourcesGenerationTest {
         generateKotlinSourcesAndCompareWithExpected("mixed_object_with_value_and_param")
     }
 
+    @Test
+    fun `multiple sentences`() {
+        generateKotlinSourcesAndCompareWithExpected("multiple_sentences")
+    }
+
     private fun generateKotlinSourcesAndCompareWithExpected(testResourceDirectory: String) {
         val inputDirectory = "src/test/resources/scenarios/${testResourceDirectory}"
         val kotlinSourcesDirectory = "$inputDirectory/sources"

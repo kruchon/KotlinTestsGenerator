@@ -1,0 +1,1 @@
+User entered a card 5555555555554444. User click the pay button. User click the accept button. Manager received payment notification. User got message about one payment of cost 500.
