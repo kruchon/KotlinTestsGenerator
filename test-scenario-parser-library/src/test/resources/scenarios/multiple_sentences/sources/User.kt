@@ -1,7 +1,11 @@
 package io.github.kruchon
 
-import io.github.kruchon.Cost
+import io.github.kruchon.Card
+import io.github.kruchon.Message
+import io.github.kruchon.Button
 
 interface User {
-    infix fun `pay tariff with`(cost: Cost)
+    infix fun enter(card: Card)
+    infix fun get(message: Message)
+    infix fun click(button: Button)
 }
